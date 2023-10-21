@@ -1,13 +1,14 @@
-package com.quancm.blog.daos;
+package com.quancm.testmidterm.daos;
 
 
-import com.quancm.blog.models.User;
+
+import com.quancm.testmidterm.models.User;
 
 import java.sql.*;
 
 public class UserDao {
     // Database connection parameters
-    private String jdbcURL = "jdbc:mysql://localhost:3306/blog";
+    private String jdbcURL = "jdbc:mysql://localhost:3306/test_mid_term";
     private String jdbcUsername = "root";
     private String jdbcPassword = "123456";
 
@@ -28,9 +29,9 @@ public class UserDao {
 
 
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from users where username = ? and password = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from users where email = ? and password = ?");
 
-            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
 
 
@@ -45,10 +46,11 @@ public class UserDao {
 
 
     public boolean addUser(User user) {
-        String INSERT_USER_SQL = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String INSERT_USER_SQL = "INSERT INTO users (email, password, name) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SQL)) {
-            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getName());
             int rowsInserted = preparedStatement.executeUpdate();
             return rowsInserted > 0;
         } catch (SQLException e) {

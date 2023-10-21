@@ -1,9 +1,7 @@
-package com.quancm.blog.controllers;
+package com.quancm.testmidterm.controllers;
 
-import com.quancm.blog.daos.PostDao;
-import com.quancm.blog.models.Post;
+import com.quancm.testmidterm.daos.ProductDao;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,29 +12,20 @@ import java.io.IOException;
 
 @WebServlet(name = "HomeController", urlPatterns = {"/home", "/"})
 public class HomeController extends HttpServlet {
-    private Post latestPost;
-    private final PostDao postDao = new PostDao();
-
-    @Override
-    public void init() throws ServletException {
-        latestPost = postDao.getPostById(1);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession(false);
-//        if (session != null && session.getAttribute("username") != null) {
-//            request.setAttribute("display", "none");
-//            request.setAttribute("action", "logout");
-//            request.setAttribute("status", "Logout");
-//            request.setAttribute("createPost", "create-post");
-//
-//        } else {
-//            request.setAttribute("action", "sign-up");
-//            request.setAttribute("status", "Sign up");
-//            request.setAttribute("createPostDisplay", "none");
-//        }
-        HeaderRefactor.checkLogin(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("email") != null) {
+//            request.setAttribute("displayLogin", "none");
+//            request.setAttribute("username" , session.getAttribute("email"));
+        }else {
+            request.setAttribute("displayHello", "none");
+            request.setAttribute("displayLogout", "none");
+        }
+
+        ProductDao productDao = new ProductDao();
+        request.setAttribute("products", productDao.listAllProducts());
 
         request.getServletContext().getRequestDispatcher("/views/index.jsp").forward(request, response);
     }

@@ -1,4 +1,4 @@
-package com.quancm.blog.filter;
+package com.quancm.testmidterm.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-@WebFilter(urlPatterns = {"/create-post"})
+@WebFilter(urlPatterns = {"/home", "/", "/search", "/delete", "/create-product"})
 public class CheckLoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,7 +25,9 @@ public class CheckLoginFilter implements Filter {
 
         HttpSession session = httpServletRequest.getSession(false);
 
-        if (session != null && session.getAttribute("username")!= null){
+        if (session != null && session.getAttribute("email")!= null){
+            request.setAttribute("displayLogin", "none");
+            request.setAttribute("username" , session.getAttribute("email"));
             chain.doFilter(request, response);
         }else {
             httpServletResponse.sendRedirect("./login");

@@ -1,4 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %><!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="com.quancm.testmidterm.models.Product" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,26 +14,34 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Trang chủ</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">Sản phẩm <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="./">Sản phẩm <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="form.html">Tạo mới sản phẩm</a>
+                <a class="nav-link" href="./create-product">Tạo mới sản phẩm</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.html">Đăng xuất</a>
+                <a class="nav-link" href="./logout">Đăng xuất</a>
             </li>
         </ul>
     </div>
     <div class="ml-auto">
-        <span class="navbar-text">Xin chào, <strong id="userName">Tên Người Dùng</strong></span>
+        <span class="navbar-text" style="display: ${displayHello}">Xin chào, <strong id="userName">${username}</strong></span>
+        <a href="./logout">
+            <button type="button" class="btn btn-outline-primary me-2" style="display: ${displayLogout}">Logout</button>
+        </a>
+        <a href="./login">
+            <button type="button" class="btn btn-outline-primary me-2" style="display: ${displayLogin}">Login</button>
+        </a>
     </div>
 </nav>
+<!-- End Navbar -->
 
 <!-- Danh sách sản phẩm dạng card -->
 <div class="container mt-4">
@@ -39,67 +49,34 @@
 
     <!-- Phần tìm kiếm -->
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" id="searchInput">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="searchButton">Tìm kiếm</button>
-        </div>
+        <form action="./search" method="get">
+            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" name="keyword">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+            </div>
+        </form>
     </div>
     <div class="row">
+        <%
+            List<Product> products = (List<Product>) request.getAttribute("products");
+            for (Product product : products) {
+        %>
         <div class="col-md-4">
             <div class="card">
 
-                <img src="https://blog.dktcdn.net/files/san-pham-moi.png" class="card-img-top" alt="Sản phẩm 1" style="width: 100%; height: 250px">
+                <img src=".<%=product.getImage()%>" class="card-img-top" alt="Sản phẩm 1"
+                     style="width: 100%; height: 250px">
                 <div class="card-body">
-                    <h5 class="card-title">Sản phẩm 1</h5>
-                    <p class="card-text">Mô tả ngắn về sản phẩm 1.</p>
-                    <p class="card-text"><strong>Danh mục:</strong> Danh mục 5</p>
+                    <h5 class="card-title"><%=product.getName()%></h5>
+                    <p class="card-text"><%=product.getDescription()%></p>
+                    <p class="card-text"><strong>Danh mục:</strong><%=product.getCategory()%></p>
                 </div>
-                <div class="card-footer">
-                    <button class="btn btn-danger" onclick="xoaSanPham(this)">Xóa</button>
-                </div>
+                <a href="./delete?id=<%= product.getId() %>" class="btn btn-warning" role="button">Delete</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img  style="width: 100%; height: 250px;" src="https://lh5.googleusercontent.com/xtuxVuJHa1855nFFlpV7vOs_k2iMDlfHydKOnmqQ7FAdUq3oSlUTo1o7HuiMncefhkl4Cdbp9jXBZRK2GmdyQbehSoN0g2E_ZKEXDmEtRbANDjMOs-OIrGt87AxY88w-ZzVKONkRqY7uXBa_-Q" class="card-img-top" alt="Sản phẩm 2">
-                <div class="card-body">
-                    <h5 class="card-title">Sản phẩm 2</h5>
-                    <p class="card-text">Mô tả ngắn về sản phẩm 2.</p>
-                    <p class="card-text"><strong>Danh mục:</strong> Danh mục 3</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-danger">Xóa</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img  style="width: 100%; height: 250px" src="https://mobiwork.vn/wp-content/uploads/2022/05/chien-luoc-marketing-cho-san-pham-moi-3.png.webp" class="card-img-top" alt="Sản phẩm 3">
-                <div class="card-body">
-                    <h5 class="card-title">Sản phẩm 3</h5>
-
-                    <p class="card-text"><strong>Danh mục:</strong> Danh mục 2</p>
-                    <p class="card-text">Mô tả ngắn về sản phẩm 3.</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-danger">Xóa</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img  style="width: 100%; height: 250px" src="https://mobiwork.vn/wp-content/uploads/2022/05/chien-luoc-marketing-cho-san-pham-moi-3.png.webp" class="card-img-top" alt="Sản phẩm 3">
-                <div class="card-body">
-                    <h5 class="card-title">Sản phẩm 3</h5>
-
-                    <p class="card-text"><strong>Danh mục:</strong> Danh mục 2</p>
-                    <p class="card-text">Mô tả ngắn về sản phẩm 3.</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-danger">Xóa</button>
-                </div>
-            </div>
-        </div>
+        <%
+            }
+        %>
     </div>
 </div>
 

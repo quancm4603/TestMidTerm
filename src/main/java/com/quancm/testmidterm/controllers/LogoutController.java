@@ -1,4 +1,4 @@
-package com.quancm.blog.controllers;
+package com.quancm.testmidterm.controllers;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

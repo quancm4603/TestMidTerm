@@ -1,7 +1,7 @@
-package com.quancm.blog.controllers;
+package com.quancm.testmidterm.controllers;
 
-import com.quancm.blog.daos.UserDao;
-import com.quancm.blog.models.User;
+import com.quancm.testmidterm.daos.UserDao;
+import com.quancm.testmidterm.models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +18,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("username") != null){
+        if (session != null && session.getAttribute("email") != null){
             response.sendRedirect("./");
         }else {
             request.getServletContext().getRequestDispatcher("/views/login.jsp").forward(request,response);
@@ -28,17 +28,17 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         User user = new User();
-        user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(password);
 
         try {
             if (userDao.validate(user)){
                 HttpSession session = request.getSession();
-                session.setAttribute("username", user.getUsername());
+                session.setAttribute("email", user.getEmail());
                 response.sendRedirect("./");
             }else {
                 request.getServletContext().getRequestDispatcher("/views/login.jsp").forward(request,response);
